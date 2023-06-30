@@ -25,7 +25,7 @@ const Navbar = () => {
           Akash<span className="text-gray-500">Srma</span>
         </a>
       </div>
-      <div className="mr-4 mt-5 font-medium text-gray-300 hover:text-gray-600">
+      <div className="mr-4 mt-5 font-medium text-gray-400 hover:text-gray-600">
         <button>SIGN-OUT</button>
       </div>
       <div className="flex-none">
