@@ -1,6 +1,12 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
+  const handleonclick = () => {
+    localStorage.removeItem("Akash");
+    router.push("/");
+  };
   return (
     <div className="navbar bg-gray-100  shadow-md">
       <div className="flex-none">
@@ -25,8 +31,10 @@ const Navbar = () => {
           Akash<span className="text-gray-500">Srma</span>
         </a>
       </div>
-      <div className="mr-4 mt-5 font-medium text-gray-400 hover:text-gray-600">
-        <button>SIGN-OUT</button>
+      <div className="mr-4 mt-5 font-medium text-gray-500 hover:text-gray-600">
+        <button onClick={handleonclick} type="button">
+          SIGN-OUT
+        </button>
       </div>
       <div className="flex-none">
         <img src="/natural.jpg" width={80} className="rounded-lg" />

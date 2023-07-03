@@ -25,6 +25,7 @@ const Login = () => {
 
     val.forEach((value) => {
       if (value.email === email && value.password === password) {
+        localStorage.setItem("Akash", JSON.stringify({ email }));
         router.push("/Dashbarnav");
         // console.log(value.email);
       } else {

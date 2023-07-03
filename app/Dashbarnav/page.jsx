@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "@/components/navbar/navbar";
 import Todolist from "@/components/todolist/todolist";
+import withAuth from "@/components/higher-order-component/protected";
 
 const dash = () => {
   const router = useRouter();
@@ -16,4 +17,4 @@ const dash = () => {
   );
 };
 
-export default dash;
+export default withAuth(dash);
