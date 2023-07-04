@@ -10,13 +10,12 @@ const Login = () => {
 
   const router = useRouter();
   const value = collection(db, "Akash");
-
+  const getData = async () => {
+    const dbVal = await getDocs(value);
+    await setVal(dbVal.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    // console.log(val);
+  };
   useEffect(() => {
-    const getData = async () => {
-      const dbVal = await getDocs(value);
-      await setVal(dbVal.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      // console.log(val);
-    };
     getData();
   }, []);
 
