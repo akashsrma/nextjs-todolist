@@ -10,9 +10,9 @@ export default function withAuth(Component) {
 
     useEffect(() => {
       if (!userIsAuthenticated) {
-        router.push("/login");
+        router.push("/");
       }
-    }, [userIsAuthenticated, router]);
+    }, []);
 
     return <Component {...props} />;
   };

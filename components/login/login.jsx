@@ -14,11 +14,11 @@ const Login = () => {
   useEffect(() => {
     const getData = async () => {
       const dbVal = await getDocs(value);
-      setVal(dbVal.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      await setVal(dbVal.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       // console.log(val);
     };
     getData();
-  }, [val]);
+  }, []);
 
   const LoginUser = (e) => {
     e.preventDefault();

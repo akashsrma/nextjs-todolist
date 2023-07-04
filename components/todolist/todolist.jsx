@@ -19,20 +19,32 @@ const Todolist = () => {
   const value = collection(db, "To-Do-List");
   const [id, setId] = useState("");
   const [show, setShow] = useState(false);
-  useEffect(() => {
-    const getData = async () => {
-      const dbval = await getDocs(value);
+
+  const getData = async () => {
+    const dbval = await getDocs(value);
+    dbval.docs.length > 0 &&
       setVal(dbval.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
+  };
+  useEffect(() => {
     getData();
-  }, [val]);
+  }, []);
+
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    getData();
+  };
   const handleCreate = async () => {
-    await addDoc(value, { fname: firstname, lname: lastname });
+    if (firstname === "" && lastname === "") {
+      alert("Enter a value");
+    } else {
+      await addDoc(value, { fname: firstname, lname: lastname });
+    }
   };
 
   const handleDelete = async (id) => {
     const deleteValue = doc(db, "To-Do-List", id);
     await deleteDoc(deleteValue);
+    getData();
   };
 
   const handleEdit = async (id, fname, lname) => {
@@ -50,7 +62,7 @@ const Todolist = () => {
     setLastname("");
   };
   return (
-    <div>
+    <form onSubmit={handlesubmit}>
       <div className="flex flex-row gap-3  items-center justify-center ">
         <input
           className="border-2 border-gray-500 rounded-md py-2"
@@ -82,26 +94,29 @@ const Todolist = () => {
         )}
       </div>
       <div>
-        {val.map((values) => (
-          <div>
-            <h1>{values.fname}</h1>
-            <h1>{values.lname}</h1>
-            <button
-              onClick={() => handleDelete(values.id)}
-              className="text-lg font-semibold rounded-md bg-gray-700 text-white px-6  cursor-pointer hover:bg-gray-300 hover:text-gray-800"
-            >
-              Delete
-            </button>
-            <button
-              onClick={() => handleEdit(values.id, values.fname, values.lname)}
-              className="text-lg font-semibold rounded-md bg-gray-700 text-white px-6 ml-3 cursor-pointer hover:bg-gray-300 hover:text-gray-800"
-            >
-              Edit
-            </button>
-          </div>
-        ))}
+        {val.length > 0 &&
+          val.map((values) => (
+            <div>
+              <h1>{values.fname}</h1>
+              <h1>{values.lname}</h1>
+              <button
+                onClick={() => handleDelete(values.id)}
+                className="text-lg font-semibold rounded-md bg-gray-700 text-white px-6  cursor-pointer hover:bg-gray-300 hover:text-gray-800"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() =>
+                  handleEdit(values.id, values.fname, values.lname)
+                }
+                className="text-lg font-semibold rounded-md bg-gray-700 text-white px-6 ml-3 cursor-pointer hover:bg-gray-300 hover:text-gray-800"
+              >
+                Edit
+              </button>
+            </div>
+          ))}
       </div>
-    </div>
+    </form>
   );
 };
 
