@@ -5,10 +5,10 @@ import { useEffect } from "react";
 export default function withAuth(Component) {
   return function ProtectedRoute({ ...props }) {
     const router = useRouter();
-    const user = JSON.parse(localStorage.getItem("Akash"));
-    const userIsAuthenticated = user !== null;
 
     useEffect(() => {
+      const user = JSON.parse(localStorage.getItem("Akash"));
+      const userIsAuthenticated = user !== null;
       if (!userIsAuthenticated) {
         router.push("/");
       }
