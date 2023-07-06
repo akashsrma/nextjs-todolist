@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/components/firebase/FierbaseConfig";
 import { useRouter } from "next/navigation";
+import { UserContext } from "../context/usercontext";
+
 const Signup = () => {
+  const { userCreate } = useContext(UserContext);
   const [userData, setUserdata] = useState({
     firstname: "",
     lastname: "",
@@ -15,6 +18,7 @@ const Signup = () => {
     confirmpassword: "",
   });
   const router = useRouter();
+
   const handlesubmit = async (e) => {
     try {
       e.preventDefault();
@@ -39,6 +43,7 @@ const Signup = () => {
         password: "",
         confirmpassword: "",
       });
+      await userCreate(userData.email, userData.password);
     } catch (error) {
       console.error("error adding documents: ", e);
     }
