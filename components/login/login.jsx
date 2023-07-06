@@ -1,18 +1,20 @@
 "use client";
 import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { db } from "../firebase/FierbaseConfig";
+import { UserContext } from "../context/usercontext";
 import { useRouter } from "next/navigation";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [val, setVal] = useState([]);
-
+  const { userLogin } = useContext(UserContext);
   const router = useRouter();
   const value = collection(db, "Akash");
   const getData = async () => {
     const dbVal = await getDocs(value);
     await setVal(dbVal.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
     // console.log(val);
   };
   useEffect(() => {
@@ -21,14 +23,13 @@ const Login = () => {
 
   const LoginUser = (e) => {
     e.preventDefault();
-
+    userLogin(email, password);
     val.forEach((value) => {
       if (value.email === email && value.password === password) {
         localStorage.setItem("Akash", JSON.stringify({ email }));
-        router.push("/Dashbarnav");
         // console.log(value.email);
       } else {
-        router.push("/login");
+        // router.push("/login");
         // console.log("signed in failed");
       }
     });

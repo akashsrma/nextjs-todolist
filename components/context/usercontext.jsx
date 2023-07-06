@@ -1,13 +1,18 @@
 "use client";
 
 import { createContext, useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../firebase/FierbaseConfig.jsx";
 
 export const UserContext = createContext();
-
 function UserProvider({ children }) {
   const [userEmail, setuserEmail] = useState();
+  const router = useRouter();
 
   const userCreate = async (email, password) => {
     await createUserWithEmailAndPassword(auth, email, password)
@@ -22,8 +27,22 @@ function UserProvider({ children }) {
         // ..
       });
   };
+  const userLogin = async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        router.push("/Dashbarnav");
+
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
   return (
-    <UserContext.Provider value={{ userCreate }}>
+    <UserContext.Provider value={{ userCreate, userLogin }}>
       {children}
     </UserContext.Provider>
   );
