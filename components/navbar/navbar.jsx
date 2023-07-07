@@ -5,6 +5,7 @@ const Navbar = () => {
   const router = useRouter();
   const handleonclick = () => {
     localStorage.removeItem("Akash");
+    localStorage.removeItem("userUid");
     router.push("/");
   };
   return (

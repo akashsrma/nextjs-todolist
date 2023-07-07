@@ -1,16 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { db } from "@/components/firebase/FierbaseConfig";
-
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { UserContext } from "../context/usercontext";
 
 const Todolist = () => {
   const [firstname, setFirstname] = useState("");
@@ -20,14 +14,25 @@ const Todolist = () => {
   const [id, setId] = useState("");
   const [show, setShow] = useState(false);
 
+  const { uid, setUid } = useContext(UserContext);
   const getData = async () => {
-    const dbval = await getDocs(value);
-    dbval.docs.length > 0 &&
-      setVal(dbval.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const q = query(collection(db, "To-Do-List"), where("uid", "==", uid));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      setVal(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+    // const dbval = await getDocs(value);
+    // dbval.docs.length > 0 &&
   };
   useEffect(() => {
+    const useruid = localStorage.getItem("userUid");
+    setUid(useruid);
     getData();
-  }, []);
+  }, [uid]);
 
   const handlesubmit = (e) => {
     e.preventDefault();
@@ -37,7 +42,7 @@ const Todolist = () => {
     if (firstname === "" && lastname === "") {
       alert("Enter a value");
     } else {
-      await addDoc(value, { fname: firstname, lname: lastname });
+      await addDoc(value, { fname: firstname, lname: lastname, uid: uid });
     }
   };
 

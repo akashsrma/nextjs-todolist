@@ -12,6 +12,7 @@ import { auth } from "../firebase/FierbaseConfig.jsx";
 export const UserContext = createContext();
 function UserProvider({ children }) {
   const [userEmail, setuserEmail] = useState();
+  const [uid, setUid] = useState("");
   const router = useRouter();
 
   const userCreate = async (email, password) => {
@@ -32,6 +33,7 @@ function UserProvider({ children }) {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        const useruid = localStorage.setItem("userUid", user.uid);
         router.push("/Dashbarnav");
 
         // ...
@@ -42,7 +44,7 @@ function UserProvider({ children }) {
       });
   };
   return (
-    <UserContext.Provider value={{ userCreate, userLogin }}>
+    <UserContext.Provider value={{ userCreate, userLogin, setUid, uid }}>
       {children}
     </UserContext.Provider>
   );
