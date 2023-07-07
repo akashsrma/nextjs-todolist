@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { db } from "@/components/firebase/FierbaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { UserContext } from "../context/usercontext";
 
 const Todolist = () => {
   const [firstname, setFirstname] = useState("");
@@ -13,9 +12,9 @@ const Todolist = () => {
   const value = collection(db, "To-Do-List");
   const [id, setId] = useState("");
   const [show, setShow] = useState(false);
-
-  const { uid, setUid } = useContext(UserContext);
+  const [uid, setUid] = useState("");
   const getData = async () => {
+    setVal([]);
     const q = query(collection(db, "To-Do-List"), where("uid", "==", uid));
 
     const querySnapshot = await getDocs(q);
@@ -32,23 +31,26 @@ const Todolist = () => {
     const useruid = localStorage.getItem("userUid");
     setUid(useruid);
     getData();
-  }, [uid]);
+  }, []);
 
   const handlesubmit = (e) => {
     e.preventDefault();
     getData();
   };
-  const handleCreate = async () => {
+  const handleCreate = async (e) => {
+    e.preventDefault();
     if (firstname === "" && lastname === "") {
       alert("Enter a value");
     } else {
       await addDoc(value, { fname: firstname, lname: lastname, uid: uid });
+      getData();
     }
   };
 
   const handleDelete = async (id) => {
     const deleteValue = doc(db, "To-Do-List", id);
     await deleteDoc(deleteValue);
+
     getData();
   };
 
@@ -59,12 +61,14 @@ const Todolist = () => {
     setShow(true);
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     const updateData = doc(db, "To-Do-List", id);
     await updateDoc(updateData, { fname: firstname, lname: lastname });
     setShow(false);
     setFirstname("");
     setLastname("");
+    getData();
   };
   return (
     <form onSubmit={handlesubmit}>

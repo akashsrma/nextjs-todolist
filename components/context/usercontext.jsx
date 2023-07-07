@@ -12,7 +12,6 @@ import { auth } from "../firebase/FierbaseConfig.jsx";
 export const UserContext = createContext();
 function UserProvider({ children }) {
   const [userEmail, setuserEmail] = useState();
-  const [uid, setUid] = useState("");
   const router = useRouter();
 
   const userCreate = async (email, password) => {
@@ -44,7 +43,7 @@ function UserProvider({ children }) {
       });
   };
   return (
-    <UserContext.Provider value={{ userCreate, userLogin, setUid, uid }}>
+    <UserContext.Provider value={{ userCreate, userLogin }}>
       {children}
     </UserContext.Provider>
   );

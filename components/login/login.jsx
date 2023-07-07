@@ -29,7 +29,7 @@ const Login = () => {
         localStorage.setItem("Akash", JSON.stringify({ email }));
         // console.log(value.email);
       } else {
-        // router.push("/login");
+        router.push("/login");
         // console.log("signed in failed");
       }
     });
